@@ -60,7 +60,10 @@
 
 ## General
 
-- [ ] Add dark mode toggle
-- [ ] Add Content-Security-Policy meta tag to `index.html`
+- [x] Dark mode toggle (button in nav, localStorage, data-theme attribute)
+- [x] Content-Security-Policy meta tag in index.html
+- [x] GitHub Actions CI (lint + test on push)
+- [x] Print receipt after sale
+- [x] Barcode scan input on POS page
+- [x] Card payment method (already in schema + UI)
 - [x] Write tests for components (26 test files, 98 tests — all passing)
-- [ ] Add GitHub Actions CI workflow

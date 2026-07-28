@@ -124,7 +124,15 @@
 - Top selling products
 - Export to CSV
 
-### Phase 5 — Accounting
+### Phase 5 — Accounting ✅
 - Expense CRUD + categories
 - Profit & Loss statement
 - Dashboard overview (today sales, pending debts, low stock)
+
+### Phase 6 — Extra Features ✅
+- Dark mode toggle (button in nav bar, saves to localStorage)
+- Content-Security-Policy meta tag
+- GitHub Actions CI (lint + test on push)
+- Print receipt after sale (80mm thermal printer format)
+- Barcode scan input (scans barcode or searches by name)
+- Card payment method
