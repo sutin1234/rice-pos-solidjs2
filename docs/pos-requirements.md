@@ -3,57 +3,70 @@
 ## Tech Stack
 - **Frontend**: SolidJS v2 + PandaCSS (existing project)
 - **Data**: IndexedDB via Dexie.js (idb wrapper)
-- **Single machine, single branch** — no backend needed
+- **Multi-branch** — browser-based, 1 DB หลายสาขา ไม่ต้องมี backend
 
 ---
 
 ## Entities
 
+### Branches (สาขา)
+| Field | Type | Notes |
+|-------|------|-------|
+| id | number (auto) | |
+| name | string | เช่น สาขาหลัก, สาขาบางนา |
+| address | string | ที่อยู่สาขา |
+| phone | string | เบอร์โทรสาขา |
+
 ### Categories (ประเภทสินค้า)
 | Field | Type | Notes |
 |-------|------|-------|
-| id | string (auto) | |
+| id | number (auto) | |
 | name | string | เช่น ข้าวหอมมะลิ, ข้าวเหนียว, ข้าวกล้อง |
 | description | string | optional |
+| branchId | number | FK → Branches |
 
 ### Products (สินค้า)
 | Field | Type | Notes |
 |-------|------|-------|
-| id | string (auto) | |
+| id | number (auto) | |
 | name | string | ชื่อสินค้า |
-| categoryId | string | FK → Categories |
+| categoryId | number | FK → Categories |
 | unit | string | หน่วย: กิโล, ถุง 1kg, ถุง 5kg, กระสอบ |
 | price | number | ราคาขายต่อหน่วย |
-| cost | number | ต้นทุนต่อหน่วย (สำหรับคำนวณกำไร) |
+| cost | number | ต้นทุนต่อหน่วย |
 | stock | number | คงเหลือ |
 | barcode | string | optional |
 | active | boolean | soft delete |
+| lowStockThreshold | number | จำนวนเตือนเมื่อสต็อกต่ำ |
+| branchId | number | FK → Branches |
 
 ### Customers (ลูกค้า)
 | Field | Type | Notes |
 |-------|------|-------|
-| id | string (auto) | |
+| id | number (auto) | |
 | name | string | |
 | phone | string | |
 | address | string | optional |
+| branchId | number | FK → Branches |
 
 ### Sales (ใบเสร็จ)
 | Field | Type | Notes |
 |-------|------|-------|
-| id | string (auto) | |
+| id | number (auto) | |
 | date | Date | |
 | items | SaleItem[] | รายการสินค้า |
 | subtotal | number | |
 | discount | number | |
 | total | number | |
 | paymentMethod | enum | cash, bank_transfer, promptpay, card, credit |
-| customerId | string | nullable — เฉพาะเงินเชื่อ |
+| customerId | number | nullable — เฉพาะเงินเชื่อ |
 | note | string | optional |
+| branchId | number | FK → Branches |
 
 ### SaleItem (รายการในใบเสร็จ)
 | Field | Type |
 |-------|------|
-| productId | string |
+| productId | number |
 | productName | string |
 | quantity | number |
 | unitPrice | number |
@@ -62,13 +75,28 @@
 ### Expenses (รายจ่าย)
 | Field | Type | Notes |
 |-------|------|-------|
-| id | string (auto) | |
+| id | number (auto) | |
 | date | Date | |
 | category | string | ค่าเช่า, ค่าน้ำไฟ, ค่าขนส่ง, เงินเดือน, ฯลฯ |
 | description | string | |
 | amount | number | |
 | paymentMethod | enum | cash, bank_transfer, promptpay |
 | note | string | optional |
+| branchId | number | FK → Branches |
+
+### StockMovements (ประวัติสต็อก)
+| Field | Type | Notes |
+|-------|------|-------|
+| id | number (auto) | |
+| productId | number | FK → Products |
+| productName | string | |
+| type | enum | in (เพิ่ม), out (ลด) |
+| quantity | number | |
+| stockBefore | number | |
+| stockAfter | number | |
+| note | string | |
+| date | Date | |
+| branchId | number | FK → Branches |
 
 ---
 
@@ -136,3 +164,10 @@
 - Print receipt after sale (80mm thermal printer format)
 - Barcode scan input (scans barcode or searches by name)
 - Card payment method
+
+### Phase 7 — Multi-Branch ✅
+- Branches CRUD (สร้างสาขาหลักอัตโนมัติ)
+- branchId field ในทุก Entity
+- DB version 3 migration + data upgrade
+- Branch selector dropdown ใน nav bar
+- ทุกหน้าถูกกรองตามสาขาที่เลือก
