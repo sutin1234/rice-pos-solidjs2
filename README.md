@@ -1,28 +1,72 @@
-## Usage
+# ระบบขายหน้าร้าน (POS) — ร้านขายของชำ
+
+ระบบจัดการหน้าร้านสำหรับร้านขายของชำ ขนมขบเคี้ยว และวัตถุดิบ ทำงานใน browser มีฟีเจอร์ครบตั้งแต่ขายหน้าร้าน, จัดการสต็อก, ลูกหนี้, ไปจนถึงรายงาน
+
+## เริ่มต้นใช้งาน
 
 ```bash
-$ pnpm install
+pnpm install        # ติดตั้ง dependencies
+pnpm prepare        # สร้าง styled-system (ต้องรันก่อน dev/build)
+pnpm dev            # เปิด dev server ที่ http://localhost:5173
 ```
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+## ฟีเจอร์หลัก
 
-## Available Scripts
+| ฟีเจอร์ | เส้นทาง |
+|---------|---------|
+| ขายหน้าร้าน (POS) | `/pos` |
+| จัดการสินค้า | `/pos/products` |
+| จัดการประเภทสินค้า | `/pos/categories` |
+| ประวัติการขาย | `/pos/sales` |
+| ลูกค้า | `/pos/customers` |
+| ลูกหนี้คงค้าง | `/pos/debts` |
+| ปรับสต็อก | `/pos/stock-adjust` |
+| รายงาน (รายวัน/เดือน/ปี/หมวดหมู่/สินค้าขายดี) | `/pos/reports` |
+| รายจ่าย (CRUD) | `/pos/expenses` |
+| งบกำไรขาดทุน | `/pos/profit-loss` |
+| หน้าหลัก Dashboard | `/pos/dashboard` |
 
-In the project directory, you can run:
+## สคริปต์
 
-### `pnpm dev`
+| คำสั่ง | คำอธิบาย |
+|--------|----------|
+| `pnpm dev` | เปิด dev server |
+| `pnpm build` | build เพื่อ production (`tsc -b && vite build`) |
+| `pnpm test` | รัน tests (Vitest) |
+| `pnpm test:watch` | รัน tests แบบ watch |
+| `pnpm lint` | ตรวจสอบ code quality (ESLint) |
+| `pnpm format` | จัดรูปแบบโค้ด (Prettier) |
+| `pnpm prepare` | สร้าง styled-system (หลังติดตั้ง dependencies) |
+| `pnpm clean` | ลบ `dist/` และ `styled-system/` |
 
-Runs the app in the development mode.<br>
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+## เทคโนโลยี
 
-### `pnpm build`
+- [SolidJS](https://solidjs.com) — UI framework
+- [TypeScript](https://typescriptlang.org) — ภาษา
+- [PandaCSS](https://panda-css.com) — styling (`css()` API)
+- [Dexie.js](https://dexie.org) — IndexedDB สำหรับเก็บข้อมูลใน browser
+- [Vitest](https://vitest.dev) — testing
 
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
+## โครงสร้างโปรเจค
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```
+src/
+├── App.tsx              # Root component + ErrorBoundary
+├── index.tsx            # Entry point
+├── components/          # UI components
+│   └── ui/              # Reusable components
+├── layouts/             # Layouts (MainLayout)
+├── pages/               # Page components
+│   └── pos/             # POS-related pages
+├── routes/              # Route definitions
+├── services/            # API layer + Dexie DB
+├── stores/              # Global state (signals)
+├── types/               # TypeScript types
+└── test/                # Test setup
+```
 
-## Deployment
+## หมายเหตุ
 
-Learn more about deploying your application with the [documentations](https://vite.dev/guide/static-deploy.html)
+- ข้อมูลทั้งหมดเก็บใน **IndexedDB** ใน browser ไม่ต้องมี server
+- ใช้ `fake-indexeddb` ใน test environment
+- รองรับ dark mode ผ่าน semantic tokens
