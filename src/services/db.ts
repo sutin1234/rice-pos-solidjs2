@@ -7,6 +7,18 @@ export interface Branch {
   phone: string
 }
 
+export interface Coupon {
+  id?: number
+  code: string
+  type: 'percentage' | 'fixed'
+  value: number
+  minPurchase: number
+  usageLimit: number
+  usedCount: number
+  active: number
+  branchId: number
+}
+
 export interface Category {
   id?: number
   name: string
@@ -52,6 +64,7 @@ export interface Sale {
   items: SaleItem[]
   subtotal: number
   discount: number
+  couponCode: string
   total: number
   paymentMethod: PaymentMethod
   customerId?: number
@@ -91,6 +104,7 @@ const db = new Dexie('RiceShopPOS') as Dexie & {
   expenses: EntityTable<Expense, 'id'>
   stockMovements: EntityTable<StockMovement, 'id'>
   branches: EntityTable<Branch, 'id'>
+  coupons: EntityTable<Coupon, 'id'>
 }
 
 db.version(1).stores({
@@ -131,6 +145,18 @@ db.version(3).upgrade(async (tx) => {
     })
   }
   await tx.table('branches').add({ name: 'สาขาหลัก', address: '', phone: '' })
+})
+
+db.version(4).stores({
+  coupons: '++id, code, active, branchId',
+})
+
+db.version(4).upgrade(async (tx) => {
+  await tx.table('sales').toCollection().modify((obj: any) => {
+    if (obj.couponCode === undefined) {
+      obj.couponCode = ''
+    }
+  })
 })
 
 export { db }

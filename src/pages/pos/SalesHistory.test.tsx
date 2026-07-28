@@ -16,7 +16,7 @@ describe('SalesHistory', () => {
     await db.sales.add({
       date: new Date('2026-01-15'),
       items: [{ productId: 1, productName: 'ข้าวหอมมะลิ', quantity: 2, unitPrice: 50, total: 100 }],
-      subtotal: 100, discount: 0, total: 100,
+      subtotal: 100, discount: 0, total: 100, couponCode: '',
       paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <SalesHistory />)
@@ -32,7 +32,7 @@ describe('SalesHistory', () => {
     await db.sales.add({
       date: new Date('2026-02-20'),
       items: [{ productId: 2, productName: 'ข้าวเหนียว', quantity: 1, unitPrice: 40, total: 40 }],
-      subtotal: 40, discount: 5, total: 35,
+      subtotal: 40, discount: 5, total: 35, couponCode: '',
       paymentMethod: 'credit', customerId: 1, note: '', branchId: 1,
     })
     render(() => <SalesHistory />)
@@ -46,7 +46,7 @@ describe('SalesHistory', () => {
     await db.sales.add({
       date: new Date(),
       items: [{ productId: 1, productName: 'ข้าวหอมมะลิ', quantity: 10, unitPrice: 50, total: 500 }],
-      subtotal: 500, discount: 50, total: 450,
+      subtotal: 500, discount: 50, total: 450, couponCode: '',
       paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <SalesHistory />)

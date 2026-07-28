@@ -21,18 +21,26 @@ describe('ProfitLoss', () => {
     const now = new Date()
     await db.sales.add({
       date: now,
-      items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 2, unitPrice: 100 }],
+      items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 2, unitPrice: 100, total: 200 }],
+      subtotal: 200,
+      discount: 0,
+      couponCode: '',
       total: 200,
       paymentMethod: 'cash',
       customerId: undefined,
+      note: '',
       branchId: 1,
     })
     await db.sales.add({
       date: now,
-      items: [{ productId: 2, productName: 'น้ำตาล', quantity: 1, unitPrice: 50 }],
+      items: [{ productId: 2, productName: 'น้ำตาล', quantity: 1, unitPrice: 50, total: 50 }],
+      subtotal: 50,
+      discount: 0,
+      couponCode: '',
       total: 50,
       paymentMethod: 'cash',
       customerId: undefined,
+      note: '',
       branchId: 1,
     })
 

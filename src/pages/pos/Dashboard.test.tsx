@@ -24,10 +24,14 @@ describe('Dashboard', () => {
     const now = new Date()
     await db.sales.add({
       date: now,
-      items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 1, unitPrice: 100 }],
+      items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 1, unitPrice: 100, total: 100 }],
+      subtotal: 100,
+      discount: 0,
+      couponCode: '',
       total: 100,
       paymentMethod: 'cash',
       customerId: undefined,
+      note: '',
       branchId: 1,
     })
 
@@ -36,13 +40,17 @@ describe('Dashboard', () => {
   })
 
   it('shows pending debts', async () => {
-    const customerId = await db.customers.add({ name: 'สมชาย', phone: '0812345678', branchId: 1 })
+    const customerId = await db.customers.add({ name: 'สมชาย', phone: '0812345678', address: '', branchId: 1 })
     await db.sales.add({
       date: new Date(),
-      items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 1, unitPrice: 200 }],
+      items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 1, unitPrice: 200, total: 200 }],
+      subtotal: 200,
+      discount: 0,
+      couponCode: '',
       total: 200,
       paymentMethod: 'credit',
       customerId,
+      note: '',
       branchId: 1,
     })
 
@@ -54,8 +62,8 @@ describe('Dashboard', () => {
   it('shows low stock warning', async () => {
     await db.products.add({
       name: 'ข้าวหอมมะลิ', categoryId: 1, unit: 'ถุง',
-      stock: 2, lowStockThreshold: 5, price: 100, costPrice: 80, active: 1,
-      barcode: '', image: '', branchId: 1,
+      stock: 2, lowStockThreshold: 5, price: 100, cost: 80, active: 1,
+      barcode: '', branchId: 1,
     })
 
     render(() => <Dashboard />)

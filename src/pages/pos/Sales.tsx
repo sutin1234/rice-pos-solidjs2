@@ -30,6 +30,9 @@ export function POS() {
   const [success, setSuccess] = createSignal(false)
   const [barcode, setBarcode] = createSignal('')
   const [lastSaleJson, setLastSaleJson] = createSignal('')
+  const [couponCode, setCouponCode] = createSignal('')
+  const [couponDiscount, setCouponDiscount] = createSignal(0)
+  const [couponMsg, setCouponMsg] = createSignal('')
 
   async function load() {
     setProducts(await db.products.where({ active: 1, branchId: currentBranchId() }).toArray())
@@ -79,7 +82,44 @@ export function POS() {
   }
 
   const subtotal = () => cart().reduce((sum, item) => sum + item.total, 0)
-  const total = () => Math.max(0, subtotal() - discount())
+
+  async function applyCoupon() {
+    const code = couponCode().trim().toUpperCase()
+    if (!code) return
+    const coupon = await db.coupons.where('code').equals(code).first()
+    if (!coupon || !coupon.active) {
+      setCouponMsg('ไม่พบคูปอง')
+      setCouponDiscount(0)
+      return
+    }
+    if (coupon.branchId !== currentBranchId()) {
+      setCouponMsg('คูปองนี้ไม่สามารถใช้ที่สาขานี้')
+      setCouponDiscount(0)
+      return
+    }
+    if (coupon.usageLimit > 0 && coupon.usedCount >= coupon.usageLimit) {
+      setCouponMsg('คูปองนี้ใช้ครบจำนวนแล้ว')
+      setCouponDiscount(0)
+      return
+    }
+    if (subtotal() < coupon.minPurchase) {
+      setCouponMsg(`ยอดซื้อขั้นต่ำ ${coupon.minPurchase.toLocaleString()} บาท`)
+      setCouponDiscount(0)
+      return
+    }
+    let disc = 0
+    if (coupon.type === 'percentage') {
+      disc = Math.round(subtotal() * coupon.value / 100)
+    } else {
+      disc = coupon.value
+    }
+    disc = Math.min(disc, subtotal())
+    setCouponDiscount(disc)
+    setCouponMsg(`ใช้คูปอง ${code} ลด ${disc.toLocaleString()} บาท`)
+  }
+
+  const totalDiscount = () => discount() + couponDiscount()
+  const total = () => Math.max(0, subtotal() - totalDiscount())
   const change = () => Math.max(0, received() - total())
 
   const needsPayment = () => method() === 'cash'
@@ -90,6 +130,7 @@ export function POS() {
     if (needsCustomer() && !customerId()) return
     if (needsPayment() && received() < total()) return
 
+    const couponApplied = couponDiscount() > 0
     const sale = {
       date: new Date(),
       branchId: currentBranchId(),
@@ -101,7 +142,8 @@ export function POS() {
         total: item.total,
       })),
       subtotal: subtotal(),
-      discount: discount(),
+      discount: totalDiscount(),
+      couponCode: couponApplied ? couponCode().trim().toUpperCase() : '',
       total: total(),
       paymentMethod: method(),
       customerId: needsCustomer() ? customerId() : undefined,
@@ -113,10 +155,19 @@ export function POS() {
         stock: item.product.stock - item.quantity,
       })
     }
+    if (couponApplied) {
+      const coupon = await db.coupons.where('code').equals(sale.couponCode).first()
+      if (coupon && coupon.id) {
+        await db.coupons.update(coupon.id, { usedCount: coupon.usedCount + 1 })
+      }
+    }
 
     setLastSaleJson(JSON.stringify({ ...sale, id: Date.now() }))
     setCart([])
     setDiscount(0)
+    setCouponCode('')
+    setCouponDiscount(0)
+    setCouponMsg('')
     setReceived(0)
     setNote('')
     setMethod('cash')
@@ -318,6 +369,44 @@ export function POS() {
               🖨️ พิมพ์บิล
             </button>
           </Show>
+
+          <div class={css({ mb: '12px' })}>
+            <label class={css({ fontSize: '13px', color: 'text', mb: '4px', display: 'block' })}>
+              คูปองส่วนลด
+            </label>
+            <div class={css({ display: 'flex', gap: '6px' })}>
+              <input
+                placeholder="ใส่โค้ดคูปอง"
+                value={couponCode()}
+                onInput={(e) => setCouponCode(e.currentTarget.value)}
+                class={css({
+                  flex: 1, px: '10px', py: '8px', borderRadius: '6px',
+                  border: '1px solid token(colors.border)', bg: 'bg', color: 'text',
+                  fontSize: '14px',
+                })}
+              />
+              <button
+                type="button"
+                onClick={applyCoupon}
+                class={css({
+                  px: '12px', py: '8px', borderRadius: '6px', cursor: 'pointer',
+                  border: '1px solid token(colors.border)', bg: 'accent', color: 'white',
+                  fontSize: '13px', fontWeight: '600',
+                  _hover: { opacity: 0.85 },
+                })}
+              >
+                ใช้
+              </button>
+            </div>
+            <Show when={couponMsg()}>
+              <div class={css({
+                mt: '4px', fontSize: '12px',
+                color: couponDiscount() > 0 ? 'green.600' : 'red.500',
+              })}>
+                {couponMsg()}
+              </div>
+            </Show>
+          </div>
 
           <div class={css({ mb: '12px' })}>
             <label class={css({ fontSize: '13px', color: 'text', mb: '4px', display: 'block' })}>

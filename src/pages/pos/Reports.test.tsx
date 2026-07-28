@@ -25,7 +25,7 @@ describe('Reports', () => {
     await db.sales.add({
       date: new Date(),
       items: [{ productId: 1, productName: 'ข้าวหอมมะลิ', quantity: 2, unitPrice: 50, total: 100 }],
-      subtotal: 100, discount: 0, total: 100,
+      subtotal: 100, discount: 0, couponCode: '', total: 100,
       paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <Reports />)
@@ -44,7 +44,7 @@ describe('Reports', () => {
     await db.sales.add({
       date: new Date(),
       items: [{ productId: 1, productName: 'ข้าวเหนียว', quantity: 1, unitPrice: 40, total: 40 }],
-      subtotal: 40, discount: 0, total: 40,
+      subtotal: 40, discount: 0, couponCode: '', total: 40,
       paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <Reports />)
@@ -63,7 +63,7 @@ describe('Reports', () => {
         { productId: 1, productName: 'ข้าวหอมมะลิ', quantity: 5, unitPrice: 50, total: 250 },
         { productId: 2, productName: 'ข้าวเหนียว', quantity: 3, unitPrice: 40, total: 120 },
       ],
-      subtotal: 370, discount: 0, total: 370,
+      subtotal: 370, discount: 0, couponCode: '', total: 370,
       paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <Reports />)

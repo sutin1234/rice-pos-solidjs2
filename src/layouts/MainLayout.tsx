@@ -57,6 +57,7 @@ export function MainLayout(props: MainLayoutProps) {
         <NavLink href="/pos/sales">ประวัติขาย</NavLink>
         <NavLink href="/pos/customers">ลูกค้า</NavLink>
         <NavLink href="/pos/debts">ลูกหนี้</NavLink>
+        <NavLink href="/pos/coupons">คูปอง</NavLink>
         <NavLink href="/pos/stock-adjust">สต็อก</NavLink>
         <NavLink href="/pos/reports">รายงาน</NavLink>
 

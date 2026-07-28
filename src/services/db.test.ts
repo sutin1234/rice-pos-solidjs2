@@ -47,6 +47,7 @@ describe('db.sales', () => {
       subtotal: 100,
       discount: 0,
       total: 100,
+      couponCode: '',
       paymentMethod: 'cash',
       note: '',
       branchId: 1,
@@ -64,6 +65,7 @@ describe('db.sales', () => {
       subtotal: 50,
       discount: 0,
       total: 50,
+      couponCode: '',
       paymentMethod: 'credit',
       customerId: custId,
       note: 'ไว้จ่ายทีหลัง',
@@ -76,8 +78,8 @@ describe('db.sales', () => {
 
   it('queries credit sales', async () => {
     await db.customers.add({ name: 'ลูกหนี้', phone: '', address: '', branchId: 1 })
-    await db.sales.add({ date: new Date(), items: [], subtotal: 0, discount: 0, total: 200, paymentMethod: 'credit', customerId: 1, note: '', branchId: 1 })
-    await db.sales.add({ date: new Date(), items: [], subtotal: 0, discount: 0, total: 100, paymentMethod: 'cash', note: '', branchId: 1 })
+    await db.sales.add({ date: new Date(), items: [], subtotal: 0, discount: 0, total: 200, couponCode: '', paymentMethod: 'credit', customerId: 1, note: '', branchId: 1 })
+    await db.sales.add({ date: new Date(), items: [], subtotal: 0, discount: 0, total: 100, couponCode: '', paymentMethod: 'cash', note: '', branchId: 1 })
     const creditSales = await db.sales.where('paymentMethod').equals('credit').toArray()
     expect(creditSales).toHaveLength(1)
     expect(creditSales[0].total).toBe(200)
