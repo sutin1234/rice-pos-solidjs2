@@ -32,4 +32,4 @@ function selectBranch(id: number) {
   setCurrentBranchId(id)
 }
 
-export { currentBranchId, branches, loadBranches, selectBranch }
+export { currentBranchId, branches, loadBranches, selectBranch, setBranches }

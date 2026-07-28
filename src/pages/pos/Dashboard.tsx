@@ -2,7 +2,7 @@ import { createSignal, createMemo, For, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { css } from '@styled-system/css'
 import { db, type Sale, type Customer, type Product } from '@/services/db'
-import { currentBranchId, setBranches } from '@/stores/branch'
+import { currentBranchId } from '@/stores/branch'
 
 export function Dashboard() {
   const navigate = useNavigate()
@@ -15,8 +15,6 @@ export function Dashboard() {
     setSales(await db.sales.where('branchId').equals(branchId).toArray())
     setCustomers(await db.customers.where('branchId').equals(branchId).toArray())
     setProducts(await db.products.where({ active: 1, branchId }).toArray())
-    const allBranches = await db.branches.toArray()
-    setBranches(allBranches.map((b) => ({ id: b.id!, name: b.name })))
   }
   load()
 
