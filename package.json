@@ -38,6 +38,7 @@
     "prettier": "^3.9.6",
     "typescript": "~7.0.2",
     "vite": "^8.1.1",
-    "vite-plugin-solid": "^3.0.0-next.16"
+    "vite-plugin-solid": "^3.0.0-next.16",
+    "vitest": "^4.1.10"
   }
 }
