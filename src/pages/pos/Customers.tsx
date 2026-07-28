@@ -1,6 +1,7 @@
 import { createSignal, For, Show } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Customer } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 export function Customers() {
   const [editing, setEditing] = createSignal<Customer | null>(null)
@@ -10,7 +11,7 @@ export function Customers() {
   const [list, setList] = createSignal<Customer[]>([])
 
   async function load() {
-    setList(await db.customers.toArray())
+    setList(await db.customers.where('branchId').equals(currentBranchId()).toArray())
   }
   load()
 
@@ -22,7 +23,7 @@ export function Customers() {
   }
 
   async function save() {
-    const data = { name: name(), phone: phone(), address: address() }
+    const data = { name: name(), phone: phone(), address: address(), branchId: currentBranchId() }
     if (editing()) {
       await db.customers.update(editing()!.id!, data)
     } else {

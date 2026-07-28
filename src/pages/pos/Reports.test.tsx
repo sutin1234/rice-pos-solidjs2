@@ -26,7 +26,7 @@ describe('Reports', () => {
       date: new Date(),
       items: [{ productId: 1, productName: 'ข้าวหอมมะลิ', quantity: 2, unitPrice: 50, total: 100 }],
       subtotal: 100, discount: 0, total: 100,
-      paymentMethod: 'cash', note: '',
+      paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <Reports />)
 
@@ -45,7 +45,7 @@ describe('Reports', () => {
       date: new Date(),
       items: [{ productId: 1, productName: 'ข้าวเหนียว', quantity: 1, unitPrice: 40, total: 40 }],
       subtotal: 40, discount: 0, total: 40,
-      paymentMethod: 'cash', note: '',
+      paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <Reports />)
 
@@ -64,7 +64,7 @@ describe('Reports', () => {
         { productId: 2, productName: 'ข้าวเหนียว', quantity: 3, unitPrice: 40, total: 120 },
       ],
       subtotal: 370, discount: 0, total: 370,
-      paymentMethod: 'cash', note: '',
+      paymentMethod: 'cash', note: '', branchId: 1,
     })
     render(() => <Reports />)
 

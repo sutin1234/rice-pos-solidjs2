@@ -1,14 +1,15 @@
 import { createSignal, createMemo, For } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type PaymentMethod, type Customer, type Sale } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 export function DebtReport() {
   const [customers, setCustomers] = createSignal<Customer[]>([])
   const [sales, setSales] = createSignal<Sale[]>([])
 
   async function load() {
-    setCustomers(await db.customers.toArray())
-    setSales(await db.sales.where('paymentMethod').equals('credit' as PaymentMethod).toArray())
+    setCustomers(await db.customers.where('branchId').equals(currentBranchId()).toArray())
+    setSales(await db.sales.where('branchId').equals(currentBranchId()).toArray())
   }
   load()
 

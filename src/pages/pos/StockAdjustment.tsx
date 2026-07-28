@@ -1,6 +1,7 @@
-import { createSignal, For, Show } from 'solid-js'
+import { createSignal, For } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Product, type StockMovement } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 export function StockAdjustment() {
   const [products, setProducts] = createSignal<Product[]>([])
@@ -11,7 +12,7 @@ export function StockAdjustment() {
   const [note, setNote] = createSignal('')
 
   async function load() {
-    setProducts(await db.products.where('active').equals(1).toArray())
+    setProducts(await db.products.where({ active: 1, branchId: currentBranchId() }).toArray())
     setMovements(await db.stockMovements.orderBy('date').reverse().limit(50).toArray())
   }
   load()
@@ -37,6 +38,7 @@ export function StockAdjustment() {
       stockAfter,
       note: note(),
       date: new Date(),
+      branchId: currentBranchId(),
     })
 
     setQuantity(0)

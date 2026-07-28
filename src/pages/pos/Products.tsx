@@ -1,6 +1,7 @@
 import { createSignal, createMemo, For, Show } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Product, type Category } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 const UNITS = ['กิโล', 'ถุง 1kg', 'ถุง 5kg', 'กระสอบ']
 
@@ -18,7 +19,7 @@ export function Products() {
   const [categories, setCategories] = createSignal<Category[]>([])
 
   async function load() {
-    setProducts(await db.products.where('active').equals(1).toArray())
+    setProducts(await db.products.where({ active: 1, branchId: currentBranchId() }).toArray())
     setCategories(await db.categories.toArray())
   }
   load()
@@ -52,6 +53,7 @@ export function Products() {
       lowStockThreshold: lowStockThreshold(),
       barcode: barcode(),
       active: 1,
+      branchId: currentBranchId(),
     }
     if (editing()) {
       await db.products.update(editing()!.id!, data)

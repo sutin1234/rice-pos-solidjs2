@@ -1,6 +1,7 @@
 import { createSignal, For, Show } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Product, type Category, type Customer, type PaymentMethod } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 interface CartItem {
   product: Product
@@ -31,9 +32,9 @@ export function POS() {
   const [lastSaleJson, setLastSaleJson] = createSignal('')
 
   async function load() {
-    setProducts(await db.products.where('active').equals(1).toArray())
+    setProducts(await db.products.where({ active: 1, branchId: currentBranchId() }).toArray())
     setCategories(await db.categories.toArray())
-    setCustomers(await db.customers.toArray())
+    setCustomers(await db.customers.where('branchId').equals(currentBranchId()).toArray())
   }
   load()
 
@@ -91,6 +92,7 @@ export function POS() {
 
     const sale = {
       date: new Date(),
+      branchId: currentBranchId(),
       items: cart().map((item) => ({
         productId: item.product.id!,
         productName: item.product.name,

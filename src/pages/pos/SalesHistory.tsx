@@ -1,6 +1,7 @@
 import { createSignal, For } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type PaymentMethod, type Sale } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 const methodLabel: Record<PaymentMethod, string> = {
   cash: 'เงินสด',
@@ -14,7 +15,8 @@ export function SalesHistory() {
   const [sales, setSales] = createSignal<Sale[]>([])
 
   async function load() {
-    setSales(await db.sales.orderBy('date').reverse().toArray())
+    const results = await db.sales.where('branchId').equals(currentBranchId()).sortBy('date')
+    setSales(results.reverse())
   }
   load()
 

@@ -1,7 +1,9 @@
+import { For } from 'solid-js'
 import { useNavigate, useHref, useLocation } from '@solidjs/router'
 import type { RouteSectionProps } from '@solidjs/router'
 import { css } from '@styled-system/css'
 import { theme, toggleTheme } from '@/stores/theme'
+import { branches, currentBranchId, selectBranch, loadBranches } from '@/stores/branch'
 
 function NavLink(props: { href: string; children: string; end?: boolean }) {
   const navigate = useNavigate()
@@ -33,6 +35,7 @@ interface MainLayoutProps {
 }
 
 export function MainLayout(props: MainLayoutProps) {
+  loadBranches()
   return (
     <>
       <nav
@@ -57,11 +60,25 @@ export function MainLayout(props: MainLayoutProps) {
         <NavLink href="/pos/stock-adjust">สต็อก</NavLink>
         <NavLink href="/pos/reports">รายงาน</NavLink>
 
+        <select
+          value={currentBranchId()}
+          onChange={(e) => selectBranch(Number(e.currentTarget.value))}
+          class={css({
+            ml: 'auto', px: '8px', py: '4px', borderRadius: '4px', cursor: 'pointer',
+            border: '1px solid token(colors.border)', bg: 'bg', color: 'text',
+            fontSize: '13px',
+          })}
+        >
+          <For each={branches()}>
+            {(b) => <option value={b.id}>{b.name}</option>}
+          </For>
+        </select>
+
         <button
           onClick={toggleTheme}
           title={theme() === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'}
           class={css({
-            ml: 'auto', px: '12px', py: '6px', borderRadius: '6px', cursor: 'pointer',
+            px: '12px', py: '6px', borderRadius: '6px', cursor: 'pointer',
             border: '1px solid token(colors.border)', bg: 'bg', color: 'text',
             fontSize: '14px',
             _hover: { bg: 'code-bg' },

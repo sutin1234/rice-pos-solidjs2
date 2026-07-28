@@ -28,6 +28,7 @@ describe('Dashboard', () => {
       total: 100,
       paymentMethod: 'cash',
       customerId: undefined,
+      branchId: 1,
     })
 
     render(() => <Dashboard />)
@@ -35,13 +36,14 @@ describe('Dashboard', () => {
   })
 
   it('shows pending debts', async () => {
-    const customerId = await db.customers.add({ name: 'สมชาย', phone: '0812345678' })
+    const customerId = await db.customers.add({ name: 'สมชาย', phone: '0812345678', branchId: 1 })
     await db.sales.add({
       date: new Date(),
       items: [{ productId: 1, productName: 'ข้าวสาร', quantity: 1, unitPrice: 200 }],
       total: 200,
       paymentMethod: 'credit',
       customerId,
+      branchId: 1,
     })
 
     render(() => <Dashboard />)
@@ -53,7 +55,7 @@ describe('Dashboard', () => {
     await db.products.add({
       name: 'ข้าวหอมมะลิ', categoryId: 1, unit: 'ถุง',
       stock: 2, lowStockThreshold: 5, price: 100, costPrice: 80, active: 1,
-      barcode: '', image: '',
+      barcode: '', image: '', branchId: 1,
     })
 
     render(() => <Dashboard />)

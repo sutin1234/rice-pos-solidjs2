@@ -20,7 +20,7 @@ describe('StockAdjustment', () => {
   it('adds stock (in)', async () => {
     const pid = await db.products.add({
       name: 'ข้าวหอมมะลิ', categoryId: 1, unit: 'กิโล',
-      price: 50, cost: 40, stock: 100, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 50, cost: 40, stock: 100, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <StockAdjustment />)
 
@@ -41,7 +41,7 @@ describe('StockAdjustment', () => {
   it('reduces stock (out)', async () => {
     const pid = await db.products.add({
       name: 'ข้าวเหนียว', categoryId: 1, unit: 'กิโล',
-      price: 40, cost: 30, stock: 50, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 40, cost: 30, stock: 50, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <StockAdjustment />)
 
@@ -63,7 +63,7 @@ describe('StockAdjustment', () => {
   it('shows movement history after adjustment', async () => {
     const pid = await db.products.add({
       name: 'ข้าวกล้อง', categoryId: 1, unit: 'กิโล',
-      price: 60, cost: 45, stock: 30, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 60, cost: 45, stock: 30, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <StockAdjustment />)
 

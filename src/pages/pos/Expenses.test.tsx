@@ -22,6 +22,7 @@ describe('Expenses', () => {
       amount: 5000,
       paymentMethod: 'cash',
       note: '',
+      branchId: 1,
     })
 
     render(() => <Expenses />)
@@ -36,6 +37,7 @@ describe('Expenses', () => {
       amount: 200,
       paymentMethod: 'cash',
       note: '',
+      branchId: 1,
     })
 
     render(() => <Expenses />)
@@ -54,6 +56,7 @@ describe('Expenses', () => {
       amount: 3000,
       paymentMethod: 'bank_transfer',
       note: '',
+      branchId: 1,
     })
 
     render(() => <Expenses />)

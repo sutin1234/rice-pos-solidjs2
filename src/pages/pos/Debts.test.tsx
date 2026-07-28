@@ -13,7 +13,7 @@ describe('DebtReport', () => {
   })
 
   it('shows debt from credit sales', async () => {
-    const custId = await db.customers.add({ name: 'สมชาย', phone: '', address: '' })
+    const custId = await db.customers.add({ name: 'สมชาย', phone: '', address: '', branchId: 1 })
     await db.sales.add({
       date: new Date(),
       items: [],
@@ -23,6 +23,7 @@ describe('DebtReport', () => {
       paymentMethod: 'credit',
       customerId: custId,
       note: '',
+      branchId: 1,
     })
 
     render(() => <DebtReport />)
@@ -34,7 +35,7 @@ describe('DebtReport', () => {
   })
 
   it('ignores cash sales', async () => {
-    await db.customers.add({ name: 'สมชาย', phone: '', address: '' })
+    await db.customers.add({ name: 'สมชาย', phone: '', address: '', branchId: 1 })
     await db.sales.add({
       date: new Date(),
       items: [],
@@ -43,6 +44,7 @@ describe('DebtReport', () => {
       total: 999,
       paymentMethod: 'cash',
       note: '',
+      branchId: 1,
     })
 
     render(() => <DebtReport />)

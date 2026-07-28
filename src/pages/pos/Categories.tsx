@@ -1,6 +1,7 @@
 import { createSignal, For, Show } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Category } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 export function Categories() {
   const [editing, setEditing] = createSignal<Category | null>(null)
@@ -9,7 +10,7 @@ export function Categories() {
   const [categories, setCategories] = createSignal<Category[]>([])
 
   async function load() {
-    setCategories(await db.categories.toArray())
+    setCategories(await db.categories.where('branchId').equals(currentBranchId()).toArray())
   }
   load()
 
@@ -20,7 +21,7 @@ export function Categories() {
   }
 
   async function save() {
-    const data = { name: name(), description: description() }
+    const data = { name: name(), description: description(), branchId: currentBranchId() }
     if (editing()) {
       await db.categories.update(editing()!.id!, data)
     } else {

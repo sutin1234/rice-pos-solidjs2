@@ -1,6 +1,7 @@
 import { createSignal, createMemo, For, Show } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Sale, type PaymentMethod } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 type Tab = 'daily' | 'monthly' | 'yearly' | 'category' | 'top'
 
@@ -44,7 +45,7 @@ export function Reports() {
   const [yearStr, setYearStr] = createSignal(String(new Date().getFullYear()))
 
   async function load() {
-    setSales(await db.sales.orderBy('date').reverse().toArray())
+    setSales(await db.sales.where('branchId').equals(currentBranchId()).toArray())
   }
   load()
 
@@ -95,7 +96,7 @@ export function Reports() {
 
   const categorySales = createMemo(async () => {
     const allSales = sales()
-    const cats = await db.categories.toArray()
+    const cats = await db.categories.where('branchId').equals(currentBranchId()).toArray()
     const catMap = new Map(cats.map((c) => [c.id!, c.name]))
     const byCat: Record<string, { qty: number; total: number }> = {}
     for (const s of allSales) {

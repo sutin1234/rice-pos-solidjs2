@@ -1,6 +1,7 @@
 import { createSignal, createMemo, For, Show } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Sale, type Expense } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 export function ProfitLoss() {
   const [sales, setSales] = createSignal<Sale[]>([])
@@ -8,8 +9,8 @@ export function ProfitLoss() {
   const [monthStr, setMonthStr] = createSignal(new Date().toISOString().slice(0, 7))
 
   async function load() {
-    setSales(await db.sales.toArray())
-    setExpenses(await db.expenses.toArray())
+    setSales(await db.sales.where('branchId').equals(currentBranchId()).toArray())
+    setExpenses(await db.expenses.where('branchId').equals(currentBranchId()).toArray())
   }
   load()
 

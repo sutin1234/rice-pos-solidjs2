@@ -25,6 +25,7 @@ describe('ProfitLoss', () => {
       total: 200,
       paymentMethod: 'cash',
       customerId: undefined,
+      branchId: 1,
     })
     await db.sales.add({
       date: now,
@@ -32,6 +33,7 @@ describe('ProfitLoss', () => {
       total: 50,
       paymentMethod: 'cash',
       customerId: undefined,
+      branchId: 1,
     })
 
     render(() => <ProfitLoss />)

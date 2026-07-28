@@ -14,10 +14,10 @@ describe('POS', () => {
   })
 
   it('adds product to cart', async () => {
-    const catId = await db.categories.add({ name: 'ข้าวสาร', description: '' })
+    const catId = await db.categories.add({ name: 'ข้าวสาร', description: '', branchId: 1 })
     await db.products.add({
       name: 'ข้าวกข', categoryId: catId, unit: 'กิโล',
-      price: 50, cost: 40, stock: 100, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 50, cost: 40, stock: 100, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <POS />)
 
@@ -29,10 +29,10 @@ describe('POS', () => {
   })
 
   it('updates quantity in cart', async () => {
-    const catId = await db.categories.add({ name: 'ข้าวนึ่ง', description: '' })
+    const catId = await db.categories.add({ name: 'ข้าวนึ่ง', description: '', branchId: 1 })
     await db.products.add({
       name: 'ข้าวนึ่งบรรจุ', categoryId: catId, unit: 'กิโล',
-      price: 40, cost: 30, stock: 50, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 40, cost: 30, stock: 50, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <POS />)
 
@@ -50,10 +50,10 @@ describe('POS', () => {
   })
 
   it('removes item when qty set to 0', async () => {
-    const catId = await db.categories.add({ name: 'ข้าวแดง', description: '' })
+    const catId = await db.categories.add({ name: 'ข้าวแดง', description: '', branchId: 1 })
     await db.products.add({
       name: 'ข้าวแดงกล้อง', categoryId: catId, unit: 'กิโล',
-      price: 55, cost: 42, stock: 20, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 55, cost: 42, stock: 20, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <POS />)
 
@@ -70,10 +70,10 @@ describe('POS', () => {
   })
 
   it('checkouts cash sale and deducts stock', async () => {
-    const catId = await db.categories.add({ name: 'ข้าวสารเงินสด', description: '' })
+    const catId = await db.categories.add({ name: 'ข้าวสารเงินสด', description: '', branchId: 1 })
     await db.products.add({
       name: 'ข้าวสด', categoryId: catId, unit: 'กิโล',
-      price: 50, cost: 40, stock: 100, barcode: '', lowStockThreshold: 0, active: 1,
+      price: 50, cost: 40, stock: 100, barcode: '', lowStockThreshold: 0, active: 1, branchId: 1,
     })
     render(() => <POS />)
 
@@ -94,10 +94,10 @@ describe('POS', () => {
   })
 
   it('checkout button disabled until enough received', async () => {
-    const catId = await db.categories.add({ name: 'ข้าวแพง', description: '' })
+    const catId = await db.categories.add({ name: 'ข้าวแพง', description: '', branchId: 1 })
     await db.products.add({
       name: 'ข้าวแพงมาก', categoryId: catId, unit: 'กิโล',
-      price: 100, cost: 80, stock: 10, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 100, cost: 80, stock: 10, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
     render(() => <POS />)
 
@@ -114,12 +114,12 @@ describe('POS', () => {
   })
 
   it('credit sale with customer selector', async () => {
-    const catId = await db.categories.add({ name: 'ข้าวเชื่อ', description: '' })
+    const catId = await db.categories.add({ name: 'ข้าวเชื่อ', description: '', branchId: 1 })
     await db.products.add({
       name: 'ข้าวเชื่อใจ', categoryId: catId, unit: 'กิโล',
-      price: 50, cost: 40, stock: 20, barcode: '', active: 1, lowStockThreshold: 0,
+      price: 50, cost: 40, stock: 20, barcode: '', active: 1, lowStockThreshold: 0, branchId: 1,
     })
-    await db.customers.add({ name: 'สมชาย', phone: '0812345678', address: '' })
+    await db.customers.add({ name: 'สมชาย', phone: '0812345678', address: '', branchId: 1 })
     render(() => <POS />)
 
     await fireEvent.click(await screen.findByText('ข้าวเชื่อใจ'))

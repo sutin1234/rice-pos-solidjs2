@@ -1,9 +1,17 @@
 import Dexie, { type EntityTable } from 'dexie'
 
+export interface Branch {
+  id?: number
+  name: string
+  address: string
+  phone: string
+}
+
 export interface Category {
   id?: number
   name: string
   description: string
+  branchId: number
 }
 
 export interface Product {
@@ -17,6 +25,7 @@ export interface Product {
   barcode: string
   active: number
   lowStockThreshold: number
+  branchId: number
 }
 
 export interface Customer {
@@ -24,6 +33,7 @@ export interface Customer {
   name: string
   phone: string
   address: string
+  branchId: number
 }
 
 export interface SaleItem {
@@ -46,6 +56,7 @@ export interface Sale {
   paymentMethod: PaymentMethod
   customerId?: number
   note: string
+  branchId: number
 }
 
 export interface Expense {
@@ -56,6 +67,7 @@ export interface Expense {
   amount: number
   paymentMethod: 'cash' | 'bank_transfer' | 'promptpay'
   note: string
+  branchId: number
 }
 
 export interface StockMovement {
@@ -68,6 +80,7 @@ export interface StockMovement {
   stockAfter: number
   note: string
   date: Date
+  branchId: number
 }
 
 const db = new Dexie('RiceShopPOS') as Dexie & {
@@ -77,6 +90,7 @@ const db = new Dexie('RiceShopPOS') as Dexie & {
   customers: EntityTable<Customer, 'id'>
   expenses: EntityTable<Expense, 'id'>
   stockMovements: EntityTable<StockMovement, 'id'>
+  branches: EntityTable<Branch, 'id'>
 }
 
 db.version(1).stores({
@@ -84,7 +98,6 @@ db.version(1).stores({
   products: '++id, name, categoryId, active',
   sales: '++id, date, paymentMethod',
   customers: '++id, name, phone',
-  expenses: '++id, date, category',
 })
 
 db.version(2).stores({
@@ -94,6 +107,30 @@ db.version(2).stores({
   customers: '++id, name, phone',
   expenses: '++id, date, category',
   stockMovements: '++id, productId, date, type',
+})
+
+db.version(3).stores({
+  branches: '++id, name',
+  categories: '++id, name, branchId',
+  products: '++id, name, categoryId, active, branchId',
+  sales: '++id, date, paymentMethod, branchId',
+  customers: '++id, name, phone, branchId',
+  expenses: '++id, date, category, branchId',
+  stockMovements: '++id, productId, date, type, branchId',
+})
+
+db.version(3).upgrade(async (tx) => {
+  const defaultBranchId = 1
+  const tableNames = ['categories', 'products', 'sales', 'customers', 'expenses', 'stockMovements'] as const
+  for (const name of tableNames) {
+    const table = tx.table(name)
+    await table.toCollection().modify((obj: any) => {
+      if (obj.branchId === undefined) {
+        obj.branchId = defaultBranchId
+      }
+    })
+  }
+  await tx.table('branches').add({ name: 'สาขาหลัก', address: '', phone: '' })
 })
 
 export { db }

@@ -18,7 +18,7 @@ describe('Products', () => {
   })
 
   it('adds a product with category name', async () => {
-    await db.categories.add({ name: 'ข้าวสาร', description: '' })
+    await db.categories.add({ name: 'ข้าวสาร', description: '', branchId: 1 })
     render(() => <Products />)
 
     await waitFor(() => {
@@ -41,7 +41,7 @@ describe('Products', () => {
   })
 
   it('deletes a product', async () => {
-    await db.categories.add({ name: 'ข้าวถุง', description: '' })
+    await db.categories.add({ name: 'ข้าวถุง', description: '', branchId: 1 })
     render(() => <Products />)
 
     await waitFor(() => {

@@ -2,6 +2,7 @@ import { createSignal, For, Show } from 'solid-js'
 import type { Component } from 'solid-js'
 import { css } from '@styled-system/css'
 import { db, type Expense } from '@/services/db'
+import { currentBranchId } from '@/stores/branch'
 
 const EXPENSE_CATEGORIES = ['ค่าเช่า', 'ค่าน้ำไฟ', 'ค่าขนส่ง', 'เงินเดือน', 'วัตถุดิบ', 'ค่าบำรุงรักษา', 'อื่นๆ']
 const PAYMENT_METHODS = ['cash', 'bank_transfer', 'promptpay'] as const
@@ -17,7 +18,7 @@ export function Expenses() {
   const [list, setList] = createSignal<Expense[]>([])
 
   async function load() {
-    const all = await db.expenses.toArray()
+    const all = await db.expenses.where('branchId').equals(currentBranchId()).toArray()
     all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     setList(all)
   }
@@ -39,6 +40,7 @@ export function Expenses() {
       category: category(),
       description: description(),
       amount: amount(),
+      branchId: currentBranchId(),
       paymentMethod: paymentMethod() as 'cash' | 'bank_transfer' | 'promptpay',
       note: note(),
     }
