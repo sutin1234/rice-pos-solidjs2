@@ -52,15 +52,15 @@
 - [x] Top selling products
 - [x] Export report to CSV
 
-## Phase 5 — Accounting
+## Phase 5 — Accounting ✅
 
-- [ ] Expense CRUD + categories
-- [ ] Profit & Loss statement
-- [ ] Dashboard overview (today sales, pending debts, low stock)
+- [x] Expense CRUD + categories
+- [x] Profit & Loss statement
+- [x] Dashboard overview (today sales, pending debts, low stock)
 
 ## General
 
 - [ ] Add dark mode toggle
 - [ ] Add Content-Security-Policy meta tag to `index.html`
-- [x] Write tests for components (23 test files, 87 tests — all passing)
+- [x] Write tests for components (26 test files, 98 tests — all passing)
 - [ ] Add GitHub Actions CI workflow

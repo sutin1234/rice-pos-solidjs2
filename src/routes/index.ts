@@ -12,11 +12,17 @@ const CustomersPage = lazy(() => import('@/pages/pos/Customers').then((m) => ({ 
 const DebtReport = lazy(() => import('@/pages/pos/Debts').then((m) => ({ default: m.DebtReport })))
 const StockAdjustment = lazy(() => import('@/pages/pos/StockAdjustment').then((m) => ({ default: m.StockAdjustment })))
 const ReportsPage = lazy(() => import('@/pages/pos/Reports').then((m) => ({ default: m.Reports })))
+const DashboardPage = lazy(() => import('@/pages/pos/Dashboard').then((m) => ({ default: m.Dashboard })))
+const ExpensesPage = lazy(() => import('@/pages/pos/Expenses').then((m) => ({ default: m.Expenses })))
+const ProfitLossPage = lazy(() => import('@/pages/pos/ProfitLoss').then((m) => ({ default: m.ProfitLoss })))
 
 export const routes = defineRoutes([
   { path: '/', component: Home },
   { path: '/about', component: About },
   { path: '/pos', component: POS },
+  { path: '/pos/dashboard', component: DashboardPage },
+  { path: '/pos/expenses', component: ExpensesPage },
+  { path: '/pos/profit-loss', component: ProfitLossPage },
   { path: '/pos/products', component: Products },
   { path: '/pos/categories', component: Categories },
   { path: '/pos/sales', component: SalesHistory },

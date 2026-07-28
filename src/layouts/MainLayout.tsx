@@ -45,7 +45,8 @@ export function MainLayout(props: MainLayoutProps) {
       >
         <NavLink href="/" end>Home</NavLink>
         <NavLink href="/about">About</NavLink>
-        <NavLink href="/pos">POS</NavLink>
+        <NavLink href="/pos/dashboard" end>หน้าหลัก</NavLink>
+        <NavLink href="/pos" end>POS</NavLink>
         <NavLink href="/pos/products">สินค้า</NavLink>
         <NavLink href="/pos/categories">ประเภท</NavLink>
         <NavLink href="/pos/sales">ประวัติขาย</NavLink>

@@ -7,6 +7,9 @@ describe('routes', () => {
     expect(paths).toContain('/')
     expect(paths).toContain('/about')
     expect(paths).toContain('/pos')
+    expect(paths).toContain('/pos/dashboard')
+    expect(paths).toContain('/pos/expenses')
+    expect(paths).toContain('/pos/profit-loss')
     expect(paths).toContain('/pos/products')
     expect(paths).toContain('/pos/categories')
     expect(paths).toContain('/pos/sales')
@@ -17,7 +20,7 @@ describe('routes', () => {
   })
 
   it('has correct number of routes', () => {
-    expect(routes).toHaveLength(11)
+    expect(routes).toHaveLength(14)
   })
 
   it('each route has path and component', () => {
