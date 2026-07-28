@@ -57,6 +57,7 @@
 | items | SaleItem[] | รายการสินค้า |
 | subtotal | number | |
 | discount | number | |
+| couponCode | string | รหัสคูปองที่ใช้ (ถ้ามี) |
 | total | number | |
 | paymentMethod | enum | cash, bank_transfer, promptpay, card, credit |
 | customerId | number | nullable — เฉพาะเงินเชื่อ |
@@ -96,6 +97,19 @@
 | stockAfter | number | |
 | note | string | |
 | date | Date | |
+| branchId | number | FK → Branches |
+
+### Coupons (คูปองส่วนลด)
+| Field | Type | Notes |
+|-------|------|-------|
+| id | number (auto) | |
+| code | string | รหัสคูปอง เช่น SALE10 |
+| type | enum | percentage (%), fixed (จำนวนเงิน) |
+| value | number | ลด % หรือจำนวนเงิน |
+| minPurchase | number | ยอดซื้อขั้นต่ำ |
+| usageLimit | number | จำกัดการใช้ (0 = ไม่จำกัด) |
+| usedCount | number | จำนวนครั้งที่ใช้แล้ว |
+| active | boolean | เปิด/ปิดการใช้งาน |
 | branchId | number | FK → Branches |
 
 ---
@@ -171,3 +185,10 @@
 - DB version 3 migration + data upgrade
 - Branch selector dropdown ใน nav bar
 - ทุกหน้าถูกกรองตามสาขาที่เลือก
+
+### Phase 8 — Coupons & Seed Data ✅
+- Coupon CRUD (code, type %/fixed, value, min purchase, usage limit)
+- Apply coupon on POS checkout with validation (active, branch, usage, min purchase)
+- Coupon discount stacks with manual discount
+- Coupon usage count increments on checkout
+- Auto-seed categories (6), products (27), customers (6) on first run
